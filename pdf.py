@@ -57,7 +57,7 @@ def insert_text_pdf(in_pdf_file, out_pdf_file, insert_text, target_x, target_y):
     output.write(output_stream)
     output_stream.close()
 
-def merge_pdf(work_path, output_pdf_filepath):
+def merge_pdf(work_path, output_pdf_filepath, tmp_pdf_filename1, tmp_pdf_filename2):
     """
     指定したフォルダに存在するPDFファイルを結合する
     :param work_path:            PDFファイルが存在するフォルダのパス
@@ -66,10 +66,11 @@ def merge_pdf(work_path, output_pdf_filepath):
     """
     # 結合したい(結合元)PDFを取得
     curdir = os.getcwd() + '/' + work_path
-    files = list(pathlib.Path(curdir).glob('*.pdf'))
+    #files = list(pathlib.Path(curdir).glob('*.pdf'))
 
     # 結合元PDFを並び替え
-    sfiles = sorted(files)
+    #sfiles = sorted(files)
+    sfiles = [curdir + tmp_pdf_filename1, curdir + tmp_pdf_filename2]
 
     # 結合先のPDFを新規作成
     doc = fitz.open()

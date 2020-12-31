@@ -4,13 +4,14 @@ from openpyxl.styles.borders import Border, Side
 from openpyxl.styles import numbers
 import win32com.client # win32comをインポートするだけでは上手くいかないので注意！！
 
-def copy_location_number(input_excel_path, input_sheet, col_num, start_row, end_row):
+def copy_location_number(input_excel_path, input_sheet, col_num, start_row):
     workbook = openpyxl.load_workbook(input_excel_path, read_only=True)
     sheet = workbook[input_sheet]
 
     localnum_list = []
 
-    for i in range(start_row, end_row + 1):
+    # 地点番号が記載してある最終行までコピーする
+    for i in range(start_row, sheet.max_row + 1):
         cell_value = sheet.cell(row=i, column=col_num).value
 
         if cell_value is None:
@@ -19,6 +20,8 @@ def copy_location_number(input_excel_path, input_sheet, col_num, start_row, end_
         # 重複は追加しない
         #if cell_value not in localnum_list:
         #    localnum_list.append(cell_value)
+
+        localnum_list.append(cell_value)
 
     return localnum_list
 
@@ -57,8 +60,8 @@ def paste_location_number(localnum_list, input_excel_path, input_sheet, EXCEL_TM
                 sheet[cell.coordinate].border = border
 
     # 印刷範囲を設定する
-    if len(sheet['B']) < 25:
-        sheet.print_area = 'A1:C24'
+    area = 'A1:C' + str(len(sheet['B']))
+    sheet.print_area = area
 
     workbook.save(filename = EXCEL_TMP_FILENAME)
 
