@@ -1,24 +1,10 @@
-PDF_DL_URL = ""
+import pandas as pd
 
+def read_settings(file_path, sheet_name, header_idx):
+    df = pd.read_excel(file_path, sheet_name=sheet_name, header=header_idx)
+    # データフレームから空白の値を含む行を削除する
+    df_formatted = df.dropna(how='any', axis=0)
+    return df_formatted
 
-# EXCEL設定
-EXCEL_INPUT_PATH = "./excel/"
-EXCEL_INPUT_FILENAME1 = "「日程等別料金」等計算書_20201120_11_42783_42783_LVZZ_0001.xlsx"
-EXCEL_INPUT_SHEETNAME1 = "「日程等別料金」等の契約・実績明細表"
-EXCEL_INPUT_FILENAME2 = "地点番号→需要者名A4.xlsx"
-EXCEL_INPUT_SHEETNAME2 = "地点番号"
-WORK_FILENAME = "tmp1.xlsx"
-WORK_DIR_PATH = "tmp/"
-
-# PDFにテキストを追加する設定
-PDF_INPUT_PATH = "./pdf_in/"
-PDF_OUTPUT_PATH = "./pdf_out/"
-PDF_INPUT_FILENAME = "託送料金等請求書_20201120_11_42783.pdf"
-PDF_OUTPUT_FILENAME1 = "tmp1.pdf"
-PDF_OUTPUT_FILENAME2 = "tmp2.pdf"
-PDF_MERGE_FILENAME = "[MERGE]test.pdf"
-INPUT_TEXT = "★★2020/12/24★★"
-INPUT_TARGET_X = "200"
-INPUT_TARGET_Y = "400"
 
 

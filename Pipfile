@@ -10,6 +10,7 @@ pdfrw = "*"
 reportlab = "*"
 pymupdf = "*"
 pywin32 = "*"
+pandas = "*"
 
 [dev-packages]
 pyinstaller = "*"
