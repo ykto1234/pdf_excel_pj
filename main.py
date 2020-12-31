@@ -9,7 +9,7 @@ if __name__ == '__main__':
         print('処理を開始します')
         print('設定ファイル（setting.xlsx）を読み込みます')
         # 共通設定の読み込み
-        common_setting_list = settings.read_settings('setting.xlsx', '共通設定', 1)
+        common_setting_list = settings.read_settings('setting.xlsx', '共通設定', 1, 'A:I')
         PDF_INPUT_PATH = common_setting_list.at[0, 'PDF_INPUT_PATH']
         PDF_OUTPUT_PATH = common_setting_list.at[0, 'PDF_OUTPUT_PATH']
         INPUT_TARGET_X = int(common_setting_list.at[0, 'INPUT_TARGET_X'])
@@ -23,7 +23,7 @@ if __name__ == '__main__':
         print('----------------------------------------')
 
         # エリア設定の読み込み
-        area_setting_list = settings.read_settings('setting.xlsx', 'エリア設定', 2)
+        area_setting_list = settings.read_settings('setting.xlsx', 'エリア設定', 2, 'A:G')
 
         for i in range(0, len(area_setting_list)):
             print(str(i+1) + 'つ目のファイルの処理を開始します')
