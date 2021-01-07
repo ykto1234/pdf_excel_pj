@@ -17,10 +17,14 @@ def copy_location_number(input_excel_path, input_sheet, col_num, start_row):
     # 最終行を取得
     # openpyxlでは動作が安定しない（指定したシートとは別のシートの最終行をとってきてしまう）ため、win32comで取得）
     excel = win32com.client.Dispatch("Excel.Application")
+    excel.Visible = False
+    excel.DisplayAlerts = False
     workbook = excel.Workbooks.Open(file_list[0], UpdateLinks=0, ReadOnly=True)
-    tmp_sheet = workbook.Worksheets(input_sheet)
+    tmp_sheet = workbook.WorkSheets(input_sheet)
     xlUp = -4162
     lastrow = tmp_sheet.Cells(tmp_sheet.Rows.Count, 2).End(xlUp).Row
+    workbook.Close()
+    workbook = None
 
     localnum_list = []
 
@@ -92,11 +96,11 @@ def paste_location_number(localnum_list, input_excel_path, input_sheet, EXCEL_TM
 
 def excel_to_pdf(EXCEL_TMP_FILENAME, input_sheet, output_pdf_path):
     excel = win32com.client.Dispatch("Excel.Application")
-    #excel.Visible = False
+    excel.Visible = False
+    excel.DisplayAlerts = False
     file = excel.Workbooks.Open(os.getcwd() + '/' + EXCEL_TMP_FILENAME, UpdateLinks=0, ReadOnly=True)
     file.WorkSheets[input_sheet].Select()
     outpath = os.getcwd() + '/' + output_pdf_path
     file.ActiveSheet.ExportAsFixedFormat(0, outpath)
-    excel.DisplayAlerts = False
     file.Close()
-    filr = None
+    file = None
