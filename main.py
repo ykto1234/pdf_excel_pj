@@ -1,4 +1,5 @@
 import os
+import traceback
 import settings
 import pdf
 import excel
@@ -23,7 +24,7 @@ if __name__ == '__main__':
         print('----------------------------------------')
 
         # エリア設定の読み込み
-        area_setting_list = settings.read_settings('setting.xlsx', 'エリア設定', 2, 'A:G')
+        area_setting_list = settings.read_settings('setting.xlsx', 'エリア設定', 2, 'A:H')
 
         for i in range(0, len(area_setting_list)):
             print(str(i+1) + 'つ目のファイルの処理を開始します')
@@ -32,6 +33,10 @@ if __name__ == '__main__':
             PDF_INPUT_FILENAME = area_setting_list.at[i, 'PDF_INPUT_FILENAME']
             EXCEL_INPUT_FILENAME1 = area_setting_list.at[i, 'EXCEL_INPUT_FILENAME1']
             EXCEL_INPUT_SHEETNAME1 = area_setting_list.at[i, 'EXCEL_INPUT_SHEETNAME1']
+            # 列番号を指定して地点番号を読み込めるように修正
+            COL_NUM = int(area_setting_list.at[i, 'COL_NUM'])
+            #START_ROW = int(area_setting_list.at[i, 'START_ROW'])
+            #END_ROW = int(area_setting_list.at[i, 'END_ROW'])
             EXCEL_INPUT_FILENAME2 = area_setting_list.at[i, 'EXCEL_INPUT_FILENAME2']
             EXCEL_INPUT_SHEETNAME2 = area_setting_list.at[i, 'EXCEL_INPUT_SHEETNAME2']
             PDF_MERGE_FILENAME = area_setting_list.at[i, 'PDF_MERGE_FILENAME']
@@ -50,8 +55,8 @@ if __name__ == '__main__':
             numbers = excel.copy_location_number(
                 EXCEL_INPUT_PATH + '/' + EXCEL_INPUT_FILENAME1,
                 EXCEL_INPUT_SHEETNAME1,
-                1, # 固定で１列目から地点番号をコピー
-                2  # 固定で２行目から地点番号をコピー
+                COL_NUM,
+                1  # 固定で１行から地点番号をコピー
             )
             print('地点番号のコピーが完了しました')
 
@@ -91,6 +96,7 @@ if __name__ == '__main__':
     except Exception as err:
         print('処理が失敗しました')
         print(err)
+        print(traceback.format_exc())
         #『続行するには何かキーを押してください . . .』と表示させる
         os.system('PAUSE')
 

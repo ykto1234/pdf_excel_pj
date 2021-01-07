@@ -1,21 +1,46 @@
 import os
+import glob
 import openpyxl
 from openpyxl.styles.borders import Border, Side
 from openpyxl.styles import numbers
 import win32com.client # win32comをインポートするだけでは上手くいかないので注意！！
 
 def copy_location_number(input_excel_path, input_sheet, col_num, start_row):
-    workbook = openpyxl.load_workbook(input_excel_path, read_only=True)
+
+    # 正規表現のファイル名から一致するファイルを取得する
+    file_list = []
+    file_list = glob.glob(os.getcwd() + '/' + input_excel_path)
+
+    workbook = openpyxl.load_workbook(file_list[0], read_only=True)
     sheet = workbook[input_sheet]
+
+    # 最終行を取得
+    # openpyxlでは動作が安定しない（指定したシートとは別のシートの最終行をとってきてしまう）ため、win32comで取得）
+    excel = win32com.client.Dispatch("Excel.Application")
+    workbook = excel.Workbooks.Open(file_list[0], UpdateLinks=0, ReadOnly=True)
+    tmp_sheet = workbook.Worksheets(input_sheet)
+    xlUp = -4162
+    lastrow = tmp_sheet.Cells(tmp_sheet.Rows.Count, 2).End(xlUp).Row
 
     localnum_list = []
 
     # 地点番号が記載してある最終行までコピーする
-    for i in range(start_row, sheet.max_row + 1):
+    #for i in range(start_row, sheet.max_row + 1):
+    for i in range(start_row, lastrow + 1):
         cell_value = sheet.cell(row=i, column=col_num).value
 
         if cell_value is None:
-            break
+            continue
+
+        # 数字か判定
+        if not cell_value.isdecimal():
+            # 数字でない場合
+            continue
+
+        # 数字が22桁か判定
+        if not len(cell_value) == 22:
+            # 22桁でない場合
+            continue
 
         # 重複は追加しない
         #if cell_value not in localnum_list:

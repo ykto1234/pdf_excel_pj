@@ -1,4 +1,5 @@
 import os
+import glob
 import pathlib
 from pathlib import Path
 import PyPDF2
@@ -38,8 +39,13 @@ def insert_text_pdf(in_pdf_file, out_pdf_file, insert_text, target_x, target_y):
     # move to the beginning of the StringIO buffer
     buffer.seek(0)
     new_pdf = PdfFileReader(buffer)
+
+    # 正規表現のファイル名から一致するファイルを取得する
+    file_list = []
+    file_list = glob.glob(os.getcwd() + '/' + in_pdf_file)
+
     # read your existing PDF
-    existing_pdf = PdfFileReader(open(in_pdf_file, 'rb'), strict=False)
+    existing_pdf = PdfFileReader(open(file_list[0], 'rb'), strict=False)
     output = PdfFileWriter()
     # 既存PDFの1ページ目を読み取り
     page = existing_pdf.getPage(0)
